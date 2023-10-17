@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifndef VERSION
+#define VERSION "(null-version)"
+#endif
+
 static char *argv0;
 
 static int
@@ -47,8 +51,22 @@ int
 main(int argc, char **argv)
 {
 	int src_fd, dest_fd;
+	int ch;
 
 	argv0 = argv[0];
+
+	while ((ch = getopt(argc, argv, "hv")) != -1) {
+		switch (ch) {
+		case 'h':
+			usage(EXIT_SUCCESS);
+			/* FALLTHROUGH */
+		case 'v':
+			fprintf(stderr, "bbcp %s\n", VERSION);
+			exit(EXIT_SUCCESS);
+		default:
+			usage(EXIT_FAILURE);
+		}
+	}
 
 	if (argc < 3)
 		usage(EXIT_FAILURE);
