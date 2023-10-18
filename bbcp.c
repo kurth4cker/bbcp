@@ -1,9 +1,12 @@
 #include <sys/stat.h>
 
 #include <err.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #ifndef VERSION
@@ -31,9 +34,32 @@ bbcopy(int src_fd, int dest_fd)
 }
 
 static int
-dest_open(char *name)
+dest_open(char *dest, char *src)
 {
-	return open(name, O_WRONLY|O_TRUNC|O_CREAT, S_IRWXU|S_IRWXG|S_IRWXO);
+	struct stat sb;
+	char *file;
+	size_t len;
+
+	file = dest;
+
+	if (lstat(dest, &sb) == -1) {
+		if (errno == ENOENT)
+			goto just_open;
+		return -1;
+	}
+
+	if (S_ISDIR(sb.st_mode)) {
+		len = strlen(dest) + strlen(src) + 2;
+
+		if ((file = malloc(len)) == NULL)
+			return -1;
+
+		snprintf(file, len, "%s/%s", dest, basename(src));
+	}
+
+just_open:
+	return open(file, O_WRONLY|O_CREAT|O_TRUNC,
+		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 }
 
 static void
@@ -75,9 +101,9 @@ main(int argc, char **argv)
 	if (src_fd == -1)
 		err(EXIT_FAILURE, "open %s for reading", argv[1]);
 
-	dest_fd = dest_open(argv[2]);
+	dest_fd = dest_open(argv[2], argv[1]);
 	if (dest_fd == -1)
-		err(EXIT_FAILURE, "cannot create %s", argv[2]);
+		err(EXIT_FAILURE, "cannot copy to %s", argv[2]);
 
 	if (bbcopy(src_fd, dest_fd) == -1)
 		err(EXIT_FAILURE, "cannot copy %s to %s", argv[1], argv[2]);
