@@ -9,10 +9,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifndef VERSION
-#define VERSION "(null-version)"
-#endif
-
 static char *argv0;
 
 static int
@@ -81,14 +77,11 @@ main(int argc, char **argv)
 
 	argv0 = argv[0];
 
-	while ((ch = getopt(argc, argv, "hv")) != -1) {
+	while ((ch = getopt(argc, argv, "h")) != -1) {
 		switch (ch) {
 		case 'h':
 			usage(EXIT_SUCCESS);
 			/* FALLTHROUGH */
-		case 'v':
-			fprintf(stderr, "bbcp %s\n", VERSION);
-			exit(EXIT_SUCCESS);
 		default:
 			usage(EXIT_FAILURE);
 		}
