@@ -12,21 +12,21 @@
 static char *argv0;
 
 static int
-bbcopy(int src_fd, int dest_fd)
+bbcopy(int fd1, int fd2)
 {
 	char buf[BUFSIZ];
-	ssize_t nbyte;
+	ssize_t n;
 
 	for (;;) {
-		nbyte = read(src_fd, buf, sizeof(buf));
-		if (nbyte <= 0)
+		n = read(fd1, buf, sizeof(buf));
+		if (n <= 0)
 			break;
 
-		if (write(dest_fd, buf, nbyte) == -1)
+		if (write(fd2, buf, n) == -1)
 			return -1;
 	}
 
-	return nbyte;
+	return n;
 }
 
 static int
@@ -72,7 +72,7 @@ usage(int code)
 int
 main(int argc, char **argv)
 {
-	int src_fd, dest_fd;
+	int fd1, fd2;
 	int ch;
 
 	argv0 = argv[0];
@@ -90,19 +90,19 @@ main(int argc, char **argv)
 	if (argc < 3)
 		usage(EXIT_FAILURE);
 
-	src_fd = open(argv[1], O_RDONLY);
-	if (src_fd == -1)
+	fd1 = open(argv[1], O_RDONLY);
+	if (fd1 == -1)
 		err(EXIT_FAILURE, "open %s for reading", argv[1]);
 
-	dest_fd = dest_open(argv[2], argv[1]);
-	if (dest_fd == -1)
+	fd2 = dest_open(argv[2], argv[1]);
+	if (fd2 == -1)
 		err(EXIT_FAILURE, "cannot copy to %s", argv[2]);
 
-	if (bbcopy(src_fd, dest_fd) == -1)
+	if (bbcopy(fd1, fd2) == -1)
 		err(EXIT_FAILURE, "cannot copy %s to %s", argv[1], argv[2]);
 
-	close(dest_fd);
-	close(src_fd);
+	close(fd2);
+	close(fd1);
 
 	return 0;
 }
