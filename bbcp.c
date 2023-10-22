@@ -39,42 +39,10 @@ cp(const char *s1, const char *s2)
 	return status;
 }
 
-/*
-static int
-dest_open(char *dest, char *src)
-{
-	struct stat sb;
-	char *file;
-	size_t len;
-
-	file = dest;
-
-	if (lstat(dest, &sb) == -1) {
-		if (errno == ENOENT)
-			goto just_open;
-		return -1;
-	}
-
-	if (S_ISDIR(sb.st_mode)) {
-		len = strlen(dest) + strlen(src) + 2;
-
-		if ((file = malloc(len)) == NULL)
-			return -1;
-
-		snprintf(file, len, "%s/%s", dest, basename(src));
-	}
-
-just_open:
-	return open(file, O_WRONLY|O_CREAT|O_TRUNC,
-		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-}
-*/
-
 static void
 usage(int code)
 {
 	fprintf(stderr, "usage: %s file newfile\n", argv0);
-//	fprintf(stderr, "usage: %s file dir\n", argv0);
 	fprintf(stderr, "\n");
 	fprintf(stderr, "see also bbcp(1)\n");
 
