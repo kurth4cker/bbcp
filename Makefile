@@ -1,14 +1,17 @@
-PROG = bbcp
-OBJ = bbcp.o
+BIN = bbcp
+OBJ = bbcp.o die.o
+INC = util.h
 
 include config.mk
 
-all: ${PROG}
-${PROG}: ${OBJ}
-	${CC} -o $@ ${OBJ} ${BBCP_LDFLAGS}
+all: ${BIN}
+${BIN}: ${OBJ}
+	${CC} ${BBCP_LDFLAGS} -o $@ ${OBJ} ${BBCP_LDLIBS}
+
+${OBJ}: ${INC}
 
 clean:
-	rm -f ${PROG} *.o
+	rm -f ${BIN} *.o
 
 .SUFFIXES: .c .o
 .c.o:

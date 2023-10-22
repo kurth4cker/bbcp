@@ -1,15 +1,9 @@
-#include <sys/stat.h>
-
-#include <err.h>
-#include <errno.h>
 #include <fcntl.h>
-#include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
-static char *argv0;
+#include "util.h"
 
 static int
 bbcopy(int fd1, int fd2)
@@ -34,9 +28,9 @@ cp(const char *s1, const char *s2)
 	perm = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH;
 
 	if ((fd1 = open(s1, O_RDONLY)) == -1)
-		err(EXIT_FAILURE, "can't read %s", s1);
+		die("can't read %s:", s1);
 	if ((fd2 = creat(s2, perm)) == -1)
-		err(EXIT_FAILURE, "can't create %s", s2);
+		die("can't create %s:", s2);
 
 	status = bbcopy(fd1, fd2);
 
@@ -108,7 +102,7 @@ main(int argc, char **argv)
 		usage(EXIT_FAILURE);
 
 	if (cp(argv[1], argv[2]) == -1)
-		err(EXIT_FAILURE, "can't copy %s to %s", argv[1], argv[2]);
+		die("can't copy %s to %s:", argv[1], argv[2]);
 
 	return 0;
 }
