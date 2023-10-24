@@ -11,6 +11,9 @@ ${OBJ}: ${INC}
 clean:
 	rm -f ${BIN} *.o
 
+check t test: $(BIN)
+	sh testcp.sh -p $(BIN)
+
 .SUFFIXES: .c .o
 .c.o:
 	${CC} ${CFLAGS} ${CPPFLAGS} -c $<

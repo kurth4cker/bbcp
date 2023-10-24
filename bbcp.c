@@ -5,6 +5,8 @@
 
 #include "util.h"
 
+#define PERM (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
+
 static int
 bbcopy(int fd1, int fd2)
 {
@@ -16,27 +18,6 @@ bbcopy(int fd1, int fd2)
 			return -1;
 
 	return n;
-}
-
-static int
-cp(const char *s1, const char *s2)
-{
-	int fd1, fd2;
-	int status;
-	mode_t perm;
-
-	perm = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH;
-
-	if ((fd1 = open(s1, O_RDONLY)) == -1)
-		die("can't read %s:", s1);
-	if ((fd2 = creat(s2, perm)) == -1)
-		die("can't create %s:", s2);
-
-	status = bbcopy(fd1, fd2);
-
-	close(fd2);
-	close(fd1);
-	return status;
 }
 
 static void
@@ -54,6 +35,7 @@ int
 main(int argc, char **argv)
 {
 	int ch;
+	int fd1, fd2;
 
 	argv0 = argv[0];
 
@@ -67,11 +49,19 @@ main(int argc, char **argv)
 		}
 	}
 
-	if (argc < 3)
+	if (argc != 3)
 		usage(EXIT_FAILURE);
 
-	if (cp(argv[1], argv[2]) == -1)
-		die("can't copy %s to %s:", argv[1], argv[2]);
+	if ((fd1 = open(argv[1], O_RDONLY)) == -1)
+		die("can't read '%s':", argv[1]);
+	if ((fd2 = creat(argv[2], PERM)) == -1)
+		die("can't creat '%s':", argv[2]);
+
+	if (bbcopy(fd1, fd2) == -1)
+		die("can't copy '%s' to '%s':", argv[1], argv[2]);
+
+	close(fd2);
+	close(fd1);
 
 	return 0;
 }
