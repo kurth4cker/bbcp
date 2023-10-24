@@ -43,7 +43,8 @@ static void
 usage(int code)
 {
 	fprintf(stderr, "usage: %s file newfile\n", argv0);
-	fprintf(stderr, "\n");
+
+	fputc('\n', stderr);
 	fprintf(stderr, "see also bbcp(1)\n");
 
 	exit(code);
