@@ -23,9 +23,6 @@ die(const char *fmt, ...)
 		fputc(' ', stderr);
 		perror(NULL);
 	}
-	else {
-		fputc('\n', stderr);
-	}
 
 	exit(EXIT_FAILURE);
 }
