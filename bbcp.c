@@ -20,6 +20,24 @@ bbcopy(int fd1, int fd2)
 	return n;
 }
 
+static int
+cp(const char *s1, const char *s2)
+{
+	int fd1, fd2;
+	int status;
+
+	if ((fd1 = open(s1, O_RDONLY)) == -1)
+		die("read %s:", s1);
+	if ((fd2 = creat(s2, PERM)) == -1)
+		die("create %s:", s2);
+
+	status = bbcopy(fd1, fd2);
+
+	close(fd2);
+	close(fd1);
+	return status;
+}
+
 static void
 usage(int code)
 {
@@ -35,7 +53,6 @@ int
 main(int argc, char **argv)
 {
 	int ch;
-	int fd1, fd2;
 
 	argv0 = argv[0];
 
@@ -52,16 +69,8 @@ main(int argc, char **argv)
 	if (argc != 3)
 		usage(EXIT_FAILURE);
 
-	if ((fd1 = open(argv[1], O_RDONLY)) == -1)
-		die("can't read '%s':", argv[1]);
-	if ((fd2 = creat(argv[2], PERM)) == -1)
-		die("can't creat '%s':", argv[2]);
-
-	if (bbcopy(fd1, fd2) == -1)
-		die("can't copy '%s' to '%s':", argv[1], argv[2]);
-
-	close(fd2);
-	close(fd1);
+	if (cp(argv[1], argv[2]) == -1)
+		die("copy %s to %s:", argv[1], argv[2]);
 
 	return 0;
 }
