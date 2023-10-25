@@ -1,7 +1,7 @@
 CC = cc
 
 BIN = bbcp
-OBJ = bbcp.o die.o
+OBJ = bbcp.o die.o copy.o
 INC = util.h
 
 all: ${BIN}
