@@ -48,34 +48,41 @@ cp(const char *s1, const char *s2)
 void
 cp2dir(const char *file, const char *dir)
 {
-	const char *fmt;
 	char buf[PATH_MAX];
 	char *src;
+	char *bname;
+	size_t dlen;
 	int len;
 
 	if ((src = strdup(file)) == NULL)
 		die("strdup: '%s':", file);
 
-	fmt = dir[strlen(dir)-1] == '/' ? "%s%s" : "%s/%s";
-	len = snprintf(buf, sizeof(buf), fmt, dir, basename(src));
+	bname = basename(src);
+	dlen = strlen(dir);
+
+	if (dlen > 0 && dir[dlen - 1] == '/')
+		len = snprintf(buf, sizeof(buf), "%s%s", dir, bname);
+	else
+		len = snprintf(buf, sizeof(buf), "%s/%s", dir, bname);
+
 	if (len < 0 || (size_t)len >= sizeof(buf))
-		die("'%s': name too long\n", file);
+		die("'%s/%s': name too long\n", dir, bname);
 
 	cpck(file, buf);
 }
 
 void
-cpck(const char *s1, const char *s2)
+cpck(const char *a, const char *b)
 {
-	struct stat st1, st2;
+	struct stat sta, stb;
 
-	if (stat(s1, &st1) == 0
-	    && stat(s2, &st2) == 0
-	    && st1.st_dev == st2.st_dev
-	    && st1.st_ino == st2.st_ino) {
-		die("%s -> %s: same file\n", s1, s2);
+	if (stat(a, &sta) == 0
+	    && stat(b, &stb) == 0
+	    && sta.st_dev == stb.st_dev
+	    && sta.st_ino == stb.st_ino) {
+		die("%s -> %s: same file\n", a, b);
 	}
 
-	if (cp(s1, s2) == -1)
-		die("%s -> %s:", s1, s2);
+	if (cp(a, b) == -1)
+		die("%s -> %s:", a, b);
 }
