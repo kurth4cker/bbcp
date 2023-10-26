@@ -1,13 +1,23 @@
 #include <sys/stat.h>
 
-#include <libgen.h>
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
 #include "util.h"
+
+static void
+enmasse(const char *s1, const char *s2)
+{
+	struct stat st;
+
+	if (!(stat(s2, &st) == 0 && S_ISDIR(st.st_mode))) {
+		cpck(s1, s2);
+		return;
+	}
+
+	cp2dir(s1, s2);
+}
 
 static void
 usage(int code)
@@ -24,14 +34,7 @@ usage(int code)
 int
 main(int argc, char **argv)
 {
-	struct stat st;
-	char buf[PATH_MAX];
-	const char *src;
-	const char *dir;
-	const char *bname;
-	size_t dlen;
 	int ch;
-	int len;
 
 	argv0 = argv[0];
 
@@ -45,27 +48,11 @@ main(int argc, char **argv)
 		}
 	}
 
-	if (argc != 3)
+	argv += optind;
+	argc -= optind;
+
+	if (argc != 2)
 		usage(EXIT_FAILURE);
 
-	if (!(stat(argv[2], &st) == 0 && S_ISDIR(st.st_mode))) {
-		cpck(argv[1], argv[2]);
-		return 0;
-	}
-
-	dir = argv[2];
-	if ((src = strdup(argv[1])) == NULL)
-		die("strdup:");
-
-	dlen = strlen(dir);
-	bname = basename(argv[1]);
-	if (dlen > 0 && dir[dlen - 1] == '/')
-		len = snprintf(buf, sizeof(buf), "%s%s", dir, bname);
-	else
-		len = snprintf(buf, sizeof(buf), "%s/%s", dir, bname);
-	if (len < 0 || (size_t)len >= sizeof(buf))
-		die("%s/%s: filename too long\n", dir, bname);
-
-	cpck(src, buf);
-	return 0;
+	enmasse(argv[0], argv[1]);
 }

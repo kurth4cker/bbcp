@@ -1,7 +1,11 @@
 #include <sys/stat.h>
 
 #include <fcntl.h>
+#include <libgen.h>
+#include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "util.h"
@@ -39,6 +43,25 @@ cp(const char *s1, const char *s2)
 	close(fd2);
 	close(fd1);
 	return status;
+}
+
+void
+cp2dir(const char *file, const char *dir)
+{
+	const char *fmt;
+	char buf[PATH_MAX];
+	char *src;
+	int len;
+
+	if ((src = strdup(file)) == NULL)
+		die("strdup: '%s':", file);
+
+	fmt = dir[strlen(dir)-1] == '/' ? "%s%s" : "%s/%s";
+	len = snprintf(buf, sizeof(buf), fmt, dir, basename(src));
+	if (len < 0 || (size_t)len >= sizeof(buf))
+		die("'%s': name too long\n", file);
+
+	cpck(file, buf);
 }
 
 void
