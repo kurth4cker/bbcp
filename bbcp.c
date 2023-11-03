@@ -11,12 +11,12 @@ enmasse(const char *s1, const char *s2)
 {
 	struct stat st;
 
-	if (!(stat(s2, &st) == 0 && S_ISDIR(st.st_mode))) {
-		cpck(s1, s2);
+	if (stat(s2, &st) == 0 && S_ISDIR(st.st_mode)) {
+		cp2dir(s1, s2);
 		return;
 	}
 
-	cp2dir(s1, s2);
+	cpck(s1, s2);
 }
 
 static void
