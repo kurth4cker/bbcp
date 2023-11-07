@@ -1,8 +1,10 @@
 CC = cc
 
 BIN = bbcp
-OBJ = bbcp.o die.o copy.o
-INC = util.h
+OBJ = bbcp.o copy.o
+INC = copy.h
+
+LIBS = -lsdie ${LDLIBS}
 
 all: ${BIN}
 ${BIN}: ${OBJ}
@@ -19,4 +21,4 @@ check t test: $(BIN)
 	${CC} ${CFLAGS} ${CPPFLAGS} -c $<
 
 .o:
-	${CC} ${LDFLAGS} -o $@ ${OBJ} ${LDLIBS}
+	${CC} ${LDFLAGS} -o $@ ${OBJ} ${LIBS}

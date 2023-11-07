@@ -8,7 +8,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "util.h"
+#include <sdie.h>
+
+#include "copy.h"
 
 #define PERM (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 

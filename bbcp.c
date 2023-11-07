@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "util.h"
+#include <sdie.h>
+
+#include "copy.h"
 
 static void
 enmasse(const char *s1, const char *s2)
