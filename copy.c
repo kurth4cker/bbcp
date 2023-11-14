@@ -17,7 +17,7 @@
 #define PERM (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 
 /* copy fd1's content into fd2 */
-int
+static int
 bbcopy(int fd1, int fd2)
 {
 	char buf[BUFSIZ];
@@ -31,7 +31,7 @@ bbcopy(int fd1, int fd2)
 }
 
 /* create s2 and copy s1's content to s2 */
-int
+static int
 cp(const char *s1, const char *s2)
 {
 	int fd1, fd2;
