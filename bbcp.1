@@ -1,14 +1,14 @@
 .Dd October 15, 2023
 .Dt BBCP 1
-
+.
 .Sh NAME
 .Nm bbcp
 .Nd bare-bones copy a file
-
+.
 .Sh SYNOPSIS
 .Nm
 source target
-
+.
 .Sh DESCRIPTION
 The
 .Nm
@@ -16,7 +16,7 @@ utility copies the contents of the source to target.
 If target is a directory,
 .Nm
 will copy source into this directory.
-
+.
 .Sh EXAMPLES
 The following examples show common usage:
 .
@@ -34,13 +34,13 @@ bbcp file1 dir/subdir/subsubdir/file2
 .Sh EXIT STATUS
 .Nm
 exits 0 on success, and >0 if an error occured.
-
+.
 .Sh SEE ALSO
 .Xr bbcpm(1),
 .Xr lseek(2),
 .Xr read(2),
 .Xr write(2)
-
+.
 .Sh NOTES
 The code for the
 .Nm
@@ -51,7 +51,7 @@ The program can be compiled using the
 and
 .Em -Werror
 flags without any errors on warnings on a NetBSD 9.x system.
-
+.
 .Sh HISTORY
 The
 .Nm
@@ -59,6 +59,6 @@ program was first assigned as the first programming assignment for the class
 CS675
 .Dq Advanced Programming in the UNIX Environment
 at Stevens Institute of Technology at least since around 2005.
-
+.
 .Sh BUGS
 Well, let's see...
