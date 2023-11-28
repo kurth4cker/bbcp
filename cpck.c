@@ -8,7 +8,7 @@
 
 #include <sdie.h>
 
-#include "copy.h"
+#include "common.h"
 
 #define PERM (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 

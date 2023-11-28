@@ -8,7 +8,7 @@
 
 #include <sdie.h>
 
-#include "copy.h"
+#include "common.h"
 
 static void
 enmasse(const char *s1, const char *s2)

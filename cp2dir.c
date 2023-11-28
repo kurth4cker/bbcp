@@ -7,7 +7,7 @@
 
 #include <sdie.h>
 
-#include "copy.h"
+#include "common.h"
 
 void
 cp2dir(const char *file, const char *dir)

@@ -2,7 +2,7 @@ CC = cc
 
 BIN = bbcp
 OBJ = bbcp.o cpck.o cp2dir.o
-INC = copy.h
+INC = common.h
 
 LIBS = -lsdie ${LDLIBS}
 
