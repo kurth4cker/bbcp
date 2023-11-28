@@ -1,7 +1,7 @@
 CC = cc
 
 BIN = bbcp
-OBJ = bbcp.o copy.o cp2dir.o
+OBJ = bbcp.o cpck.o cp2dir.o
 INC = copy.h
 
 LIBS = -lsdie ${LDLIBS}
