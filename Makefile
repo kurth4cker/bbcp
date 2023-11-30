@@ -1,3 +1,4 @@
+.POSIX:
 CC = cc
 
 BIN = bbcp
