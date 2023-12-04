@@ -8,7 +8,7 @@ DEBUG = yes
 
 # internal settings
 BIN = bbcp
-OBJ = bbcp.o cpck.o cp2dir.o
+OBJ = main.o cpck.o cp2dir.o
 INC = common.h
 
 CFLAGS_DEBUG_yes = -g
