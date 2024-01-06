@@ -2,19 +2,13 @@
 # recommended for end user and packager customization below
 # and LDFLAGS and LDLIBS
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-
-DEBUG = yes
+CFLAGS = -g -Wall -Wextra -Werror
 
 # internal settings
 BIN = bbcp
 OBJ = main.o cpck.o cp2dir.o
 INC = common.h
 
-CFLAGS_DEBUG_yes = -g
-CFLAGS_DEBUG_no = -DNDEBUG
-
-OBJ_CFLAGS = ${CFLAGS_DEBUG_${DEBUG}} ${CFLAGS}
 BIN_LDFLAGS = -lsdie ${LDFLAGS}
 
 all: ${BIN}
@@ -31,4 +25,4 @@ check t test: ${BIN}
 
 .SUFFIXES: .c .o
 .c.o:
-	${CC} ${OBJ_CFLAGS} -c $<
+	${CC} ${CFLAGS} -c $<
